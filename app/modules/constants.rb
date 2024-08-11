@@ -1,6 +1,9 @@
 # frozen_string_literal: true
 
 module Constants
+  USER_START_BANK = 100
+  DEALER_START_BANK = 100
+
   CARDS = [{ id: 1, value: 2, pic: '2♥️' },
            { id: 2, value: 3, pic: '3♥️' },
            { id: 3, value: 4, pic: '4♥️' },
