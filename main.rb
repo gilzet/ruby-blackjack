@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require_relative 'app/modules/constants'
 require_relative 'app/modules/cards'
 require_relative 'app/modules/validation'
