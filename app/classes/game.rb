@@ -22,6 +22,9 @@ class Game
 
   private
 
+  attr_accessor :deck
+  attr_writer :user, :dealer
+
   def core_game_loop
     loop do
       if user.bank <= 0 || dealer.bank <= 0
@@ -43,11 +46,29 @@ class Game
   end
 
   def core_game
-    puts 'Current count:'
-    puts info
+    deal_initial_cards
 
-    # here core_game
+    loop do
+      show_options
+      # here get input and play until showdown
+    end
+
   end
 
-  attr_writer :user, :dealer
+  def deal_initial_cards
+    puts 'Current count:'
+    puts info
+    user.bank -= BET
+    dealer.bank -= BET
+    deck = CARDS.keys
+
+    2.times do
+      user.get_card(deck.delete(deck.sample))
+      dealer.get_card(deck.delete(deck.sample))
+    end
+  end
+
+  def show_options
+    nil # here showing player options
+  end
 end

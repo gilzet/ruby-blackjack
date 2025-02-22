@@ -3,6 +3,7 @@
 module Constants
   USER_START_BANK = 100
   DEALER_START_BANK = 100
+  BET = 10
   BLACK_JACK = 21
 
   CARDS = { 1 => { value: 2, pic: '2♥️' },
