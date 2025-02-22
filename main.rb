@@ -8,4 +8,5 @@ require_relative 'app/classes/player'
 require_relative 'app/classes/user'
 require_relative 'app/classes/dealer'
 
-Game.new.start
+game = Game.new
+game.start

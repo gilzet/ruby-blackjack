@@ -59,4 +59,6 @@ module Constants
             52 => { value: nil, pic: 'A♠️' } }.freeze
 
   GREETING = 'Welcome to BlackJack table'
+  USER_NO_MONEY = 'You have no money left. Finishing the game'
+  DEALER_NO_MONEY = 'Congrats! You won the game!'
 end

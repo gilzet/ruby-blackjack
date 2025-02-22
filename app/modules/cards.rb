@@ -18,10 +18,10 @@ module Cards
     pics.join(', ')
   end
 
-  def arbiter(first_value, second_value)
-    if first_value == second_value || (first_value > BLACK_JACK && second_value > BLACK_JACK)
+  def arbiter(user_hand_value, dealer_hand_value)
+    if user_hand_value == dealer_hand_value || (user_hand_value > BLACK_JACK && dealer_hand_value > BLACK_JACK)
       :draw
-    elsif (first_value > second_value && first_value <= BLACK_JACK) || second_value > BLACK_JACK
+    elsif (user_hand_value > dealer_hand_value && user_hand_value <= BLACK_JACK) || dealer_hand_value > BLACK_JACK
       :win
     else
       :lose
