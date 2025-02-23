@@ -5,6 +5,8 @@ module Constants
   DEALER_START_BANK = 100
   BET = 10
   BLACK_JACK = 21
+  CARD_MASK = '*'
+  DEALER_STOP_POINT = 17
 
   CARDS = { 1 => { value: 2, pic: '2♥️' },
             2 => { value: 3, pic: '3♥️' },

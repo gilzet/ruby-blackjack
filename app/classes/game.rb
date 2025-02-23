@@ -22,7 +22,7 @@ class Game
 
   private
 
-  attr_accessor :deck
+  attr_accessor :deck, :stand_used, :is_showdown
   attr_writer :user, :dealer
 
   def core_game_loop
@@ -46,16 +46,31 @@ class Game
   end
 
   def core_game
-    deal_initial_cards
+    initial_deal
 
     loop do
       show_options
-      # here get input and play until showdown
+      action = gets.chomp.downcase
+      action = nil if (action == '1' && user.hand.size >= 3) || (action == '2' && stand_used)
+
+      case action
+      when '1' then user.get_card(deck.delete(deck.sample))
+      when '2' then self.stand_used = true
+      when '3' then self.is_showdown = true
+      else
+        puts "don't understand input"
+        redo
+      end
+
+      break if is_showdown
+
+      dealer.get_card(deck.delete(deck.sample)) if dealer.hand_value < DEALER_STOP_POINT && dealer.hand.size < 3
     end
 
+    showdown
   end
 
-  def deal_initial_cards
+  def initial_deal
     puts 'Current count:'
     puts info
     user.bank -= BET
@@ -69,6 +84,18 @@ class Game
   end
 
   def show_options
-    nil # here showing player options
+    puts <<~TXT
+      ====================
+       #{user.name}: #{Cards.get_hand_pic(user)} points: #{user.hand_value}
+       Dealer: #{Cards.get_hand_pic(dealer, is_showdown)} points: #{dealer.hand_value if is_showdown}
+      ====================
+      #{user.hand.size >= 3 ? '' : '1. Hit: Take another card'}
+      #{stand_used ? '' : '2. Stand: Take no more cards'}
+      3. Showdown
+    TXT
+  end
+
+  def showdown
+    # here is showdown
   end
 end

@@ -13,8 +13,12 @@ module Cards
     end
   end
 
-  def get_pics(cards)
-    pics = cards.map { |card| CARDS[card][:pic] }
+  def get_hand_pic(player, is_showdown = nil)
+    pics = if is_showdown || player.instance_of?(User)
+             player.hand.map { |card| CARDS[card][:pic] }
+           else
+             player.hand.map { CARD_MASK }
+           end
     pics.join(', ')
   end
 
