@@ -47,8 +47,10 @@ class Game
 
   def core_game
     initial_deal
+    bank_recount(:initial)
 
     loop do
+      show_status
       show_options
       action = gets.chomp.downcase
       action = nil if (action == '1' && user.hand.size >= 3) || (action == '2' && stand_used)
@@ -73,8 +75,6 @@ class Game
   def initial_deal
     puts 'Current count:'
     puts info
-    user.bank -= BET
-    dealer.bank -= BET
     deck = CARDS.keys
 
     2.times do
@@ -83,19 +83,55 @@ class Game
     end
   end
 
+  def showdown
+    result = Cards.arbiter(user.hand_value, dealer.hand_value)
+    bank_recount(result)
+
+    show_status
+
+    case result
+    when :draw then puts 'Draw'
+    when :win then puts "#{user.name} win"
+    when :lose then puts 'Dealer win'
+    else raise StandardError, 'Unknown game result'
+    end
+
+    puts 'Play again? No or 0 for exit'
+    again = gets.chomp.downcase
+    exit_game if %w[0 no].include?(again)
+  end
+
+  def bank_recount(action)
+    case action
+    when :initial
+      user.bank -= BET
+      dealer.bank -= BET
+    when :draw
+      user.bank += BET
+      dealer.bank += BET
+    when :win
+      user.bank += BET * 2
+    when :lose
+      dealer.bank += BET * 2
+    else
+      raise StandardError, 'Unknown bank_action'
+    end
+  end
+
   def show_options
     puts <<~TXT
-      ====================
-       #{user.name}: #{Cards.get_hand_pic(user)} points: #{user.hand_value}
-       Dealer: #{Cards.get_hand_pic(dealer, is_showdown)} points: #{dealer.hand_value if is_showdown}
-      ====================
       #{user.hand.size >= 3 ? '' : '1. Hit: Take another card'}
       #{stand_used ? '' : '2. Stand: Take no more cards'}
       3. Showdown
     TXT
   end
 
-  def showdown
-    # here is showdown
+  def show_status
+    puts <<~TXT
+      ====================
+       #{user.name}: #{Cards.get_hand_pic(user)} points: #{user.hand_value}
+       Dealer: #{Cards.get_hand_pic(dealer, is_showdown)} points: #{dealer.hand_value if is_showdown}
+      ====================
+    TXT
   end
 end
