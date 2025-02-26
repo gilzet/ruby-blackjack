@@ -3,6 +3,6 @@
 class Dealer < Player
   def initialize
     super
-    @bank = DEALER_START_BANK
+    @bank = Constants::DEALER_START_BANK
   end
 end

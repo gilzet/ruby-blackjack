@@ -13,7 +13,7 @@ class Game
   end
 
   def start
-    puts GREETING
+    puts Constants::GREETING
     puts 'Please enter player name: '
     user.name = gets.chomp.capitalize
 
@@ -38,9 +38,9 @@ class Game
   def exit_game
     puts info
     if user.bank <= 0
-      puts USER_NO_MONEY
+      puts Constants::USER_NO_MONEY
     elsif dealer.bank <= 0
-      puts DEALER_NO_MONEY
+      puts Constants::DEALER_NO_MONEY
     end
     exit
   end
@@ -66,7 +66,9 @@ class Game
 
       break if is_showdown
 
-      dealer.get_card(deck.delete(deck.sample)) if dealer.hand_value < DEALER_STOP_POINT && dealer.hand.size < 3
+      if dealer.hand_value < Constants::DEALER_STOP_POINT && dealer.hand.size < 3
+        dealer.get_card(deck.delete(deck.sample))
+      end
     end
 
     showdown
@@ -75,7 +77,7 @@ class Game
   def initial_deal
     puts 'Current count:'
     puts info
-    deck = CARDS.keys
+    deck = Cards.keys
 
     2.times do
       user.get_card(deck.delete(deck.sample))
@@ -104,15 +106,15 @@ class Game
   def bank_recount(action)
     case action
     when :initial
-      user.bank -= BET
-      dealer.bank -= BET
+      user.bank -= Constants::BET
+      dealer.bank -= Constants::BET
     when :draw
-      user.bank += BET
-      dealer.bank += BET
+      user.bank += Constants::BET
+      dealer.bank += Constants::BET
     when :win
-      user.bank += BET * 2
+      user.bank += Constants::BET * 2
     when :lose
-      dealer.bank += BET * 2
+      dealer.bank += Constants::BET * 2
     else
       raise StandardError, 'Unknown bank_action'
     end
