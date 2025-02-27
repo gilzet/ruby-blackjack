@@ -1,7 +1,9 @@
 # frozen_string_literal: true
 
 class Player
-  attr_reader :bank, :hand, :hand_value
+  include Constants
+  attr_accessor :bank
+  attr_reader :hand, :hand_value
 
   def initialize
     @hand = []
@@ -13,7 +15,12 @@ class Player
     self.hand_value = Cards.get_value(hand)
   end
 
+  def discard
+    self.hand = []
+    self.hand_value = 0
+  end
+
   protected
 
-  attr_writer :bank, :hand, :hand_value
+  attr_writer :hand, :hand_value
 end

@@ -5,6 +5,6 @@ class User < Player
 
   def initialize
     super
-    @bank = Constants::USER_START_BANK
+    @bank = USER_START_BANK
   end
 end
