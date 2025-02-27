@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 class Game
+  include Constants
   attr_reader :user, :dealer
 
   def initialize
@@ -13,7 +14,7 @@ class Game
   end
 
   def start
-    puts Constants::GREETING
+    puts GREETING
     puts 'Please enter player name: '
     user.name = gets.chomp.capitalize
 
@@ -38,9 +39,9 @@ class Game
   def exit_game
     puts info
     if user.bank <= 0
-      puts Constants::USER_NO_MONEY
+      puts USER_NO_MONEY
     elsif dealer.bank <= 0
-      puts Constants::DEALER_NO_MONEY
+      puts DEALER_NO_MONEY
     end
     exit
   end
@@ -61,23 +62,23 @@ class Game
       when '3' then self.is_showdown = true
       else
         puts "don't understand input"
+        gets
         redo
       end
 
       break if is_showdown
 
-      if dealer.hand_value < Constants::DEALER_STOP_POINT && dealer.hand.size < 3
-        dealer.get_card(deck.delete(deck.sample))
-      end
+      dealer.get_card(deck.delete(deck.sample)) if dealer.hand_value < DEALER_STOP_POINT && dealer.hand.size < 3
     end
 
     showdown
+    cleanup
   end
 
   def initial_deal
     puts 'Current count:'
     puts info
-    deck = Cards.keys
+    self.deck = CARDS.keys
 
     2.times do
       user.get_card(deck.delete(deck.sample))
@@ -98,23 +99,31 @@ class Game
     else raise StandardError, 'Unknown game result'
     end
 
+    puts info
     puts 'Play again? No or 0 for exit'
     again = gets.chomp.downcase
     exit_game if %w[0 no].include?(again)
   end
 
+  def cleanup
+    self.is_showdown = false
+    self.stand_used = false
+    user.discard
+    dealer.discard
+  end
+
   def bank_recount(action)
     case action
     when :initial
-      user.bank -= Constants::BET
-      dealer.bank -= Constants::BET
+      user.bank -= BET
+      dealer.bank -= BET
     when :draw
-      user.bank += Constants::BET
-      dealer.bank += Constants::BET
+      user.bank += BET
+      dealer.bank += BET
     when :win
-      user.bank += Constants::BET * 2
+      user.bank += BET * 2
     when :lose
-      dealer.bank += Constants::BET * 2
+      dealer.bank += BET * 2
     else
       raise StandardError, 'Unknown bank_action'
     end
